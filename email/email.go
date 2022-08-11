@@ -1,0 +1,57 @@
+package email
+
+import (
+	"Finale/data"
+	"fmt"
+	"io/ioutil"
+	"strconv"
+	"strings"
+)
+
+var filePath = "C:/Users/k.semerenko/GolandProjects/simulator/skillbox-diploma/email.data"
+
+type EmailData struct {
+	Country      string `json:"country"`
+	Provider     string `json:"provider"`
+	DeliveryTime int    `json:"delivery_time"`
+}
+
+func (s *EmailData) parse(in string) bool {
+	tmp := strings.Split(in, ";")
+	if len(tmp) == 3 {
+		s.Country = tmp[0]
+		s.Provider = tmp[1]
+		deliveryTime, err := strconv.Atoi(tmp[2])
+		if err != nil {
+			return false
+		}
+		s.DeliveryTime = deliveryTime
+
+		return true
+	}
+	return false
+}
+
+func EmailGet() []EmailData {
+	f, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("cannot read file")
+	}
+	t := strings.Split(string(f), "\n")
+	var emailData []EmailData
+	for _, d := range t {
+		var email EmailData
+		b := email.parse(d)
+		if b != true {
+			continue
+		}
+		if data.CountryCheck(email.Country) == false {
+			continue
+		}
+		if data.ProvidersEmailCheck(email.Provider) == false {
+			continue
+		}
+		emailData = append(emailData, email)
+	}
+	return emailData
+}
