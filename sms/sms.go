@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var filePath = "C:/Users/k.semerenko/GolandProjects/simulator/skillbox-diploma/sms.data"
+var filePath = "./sms.data"
 
 type SMSData struct {
 	Country      string `json:"country"`

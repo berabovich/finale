@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-var filePath = "C:/Users/k.semerenko/GolandProjects/simulator/skillbox-diploma/billing.data"
+var filePath = "./billing.data"
 
 type BillingData struct {
 	CreateCustomer bool `json:"create_customer"`
