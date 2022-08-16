@@ -4,13 +4,18 @@ import (
 	"Finale/result"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"html/template"
 	"net/http"
 )
 
 func Server() {
 	r := mux.NewRouter()
 	r.Host("http://localhost:8080")
+	fs := http.StripPrefix("/web/", http.FileServer(http.Dir("web")))
 	r.HandleFunc("/api", handleConnection)
+	r.PathPrefix("/web/").Handler(fs)
+	r.HandleFunc("/", homePage)
+
 	err := http.ListenAndServe("localhost:8080", r)
 	if err != nil {
 		return
@@ -34,9 +39,12 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	//fmt.Fprintf(w, "Category: %v\n", vars["category"])
 	_, err = w.Write(res)
 	if err != nil {
 		return
 	}
+}
+func homePage(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("./web/status_page.html")
+	t.Execute(w, nil)
 }
