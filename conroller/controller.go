@@ -12,7 +12,8 @@ func Server() {
 	r := mux.NewRouter()
 	r.Host("http://localhost:8080")
 	r.HandleFunc("/api", handleConnection)
-	r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
+	//r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
+	http.Handle("/web/", http.FileServer(http.Dir("./web")))
 	r.HandleFunc("/", homePage)
 
 	err := http.ListenAndServe("localhost:8080", r)
