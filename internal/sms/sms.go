@@ -1,14 +1,14 @@
 package sms
 
 import (
-	"Finale/data"
+	"Finale/internal/data"
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 )
 
-var filePath = "./sms.data"
+var filePath = "../simulator/sms.data"
 
 type SMSData struct {
 	Country      string `json:"country"`

@@ -1,14 +1,14 @@
 package email
 
 import (
-	"Finale/data"
+	"Finale/internal/data"
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 )
 
-var filePath = "./email.data"
+var filePath = "../simulator/email.data"
 
 type EmailData struct {
 	Country      string `json:"country"`

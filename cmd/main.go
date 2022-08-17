@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Finale/conroller"
+	"Finale/internal/conroller"
 )
 
 func main() {

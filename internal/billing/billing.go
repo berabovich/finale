@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-var filePath = "./billing.data"
+var filePath = "../simulator/billing.data"
 
 type BillingData struct {
 	CreateCustomer bool `json:"create_customer"`

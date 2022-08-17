@@ -1,7 +1,7 @@
 package mms
 
 import (
-	"Finale/data"
+	"Finale/internal/data"
 	"encoding/json"
 	"io"
 	"net/http"

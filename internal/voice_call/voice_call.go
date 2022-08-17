@@ -1,14 +1,14 @@
 package voice_call
 
 import (
-	"Finale/data"
+	"Finale/internal/data"
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
 )
 
-var filePath = "./voice.data"
+var filePath = "../simulator/voice.data"
 
 type VoiceCallData struct {
 	Country             string  `json:"country"`

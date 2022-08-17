@@ -1,14 +1,14 @@
 package result
 
 import (
-	"Finale/billing"
-	"Finale/data"
-	"Finale/email"
-	"Finale/incident"
-	"Finale/mms"
-	"Finale/sms"
-	"Finale/support"
-	"Finale/voice_call"
+	"Finale/internal/billing"
+	"Finale/internal/data"
+	"Finale/internal/email"
+	"Finale/internal/incident"
+	"Finale/internal/mms"
+	"Finale/internal/sms"
+	"Finale/internal/support"
+	"Finale/internal/voice_call"
 	"sort"
 )
 
