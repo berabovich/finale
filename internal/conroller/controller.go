@@ -12,8 +12,8 @@ func Server() {
 	r := mux.NewRouter()
 	r.Host("http://localhost:8080")
 	r.HandleFunc("/api", handleConnection)
-	r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
-	//http.Handle("/web/", http.FileServer(http.Dir("./web")))
+	//r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("internal/web"))))
+	http.Handle("/web/", http.FileServer(http.Dir("./internal/web")))
 	r.HandleFunc("/", homePage)
 
 	err := http.ListenAndServe("localhost:8080", r)
@@ -45,6 +45,6 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func homePage(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("./web/status_page.html")
+	t, _ := template.ParseFiles("./internal/web/status_page.html")
 	t.Execute(w, nil)
 }
