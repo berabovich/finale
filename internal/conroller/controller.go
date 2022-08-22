@@ -45,6 +45,6 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func homePage(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("./internal/web/status_page.html")
+	t, _ := template.ParseFiles("./web/status_page.html")
 	t.Execute(w, nil)
 }
