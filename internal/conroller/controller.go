@@ -12,8 +12,8 @@ func Server() {
 	r := mux.NewRouter()
 	r.Host("http://localhost:8080")
 	r.HandleFunc("/api", handleConnection)
-	//r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("internal/web"))))
-	http.Handle("/web/", http.FileServer(http.Dir("./internal/web")))
+	r.PathPrefix("/web/").Handler(http.StripPrefix("/web/", http.FileServer(http.Dir("web"))))
+
 	r.HandleFunc("/", homePage)
 
 	err := http.ListenAndServe("localhost:8080", r)
@@ -21,14 +21,15 @@ func Server() {
 		return
 	}
 }
+
 func handleConnection(w http.ResponseWriter, r *http.Request) {
-	//vars := mux.Vars(r)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	a := result.ResultT{}
 	b := result.GetResultData()
+
 	if b.SMS != nil && b.MMS != nil && b.VoiceCall != nil && b.Email != nil && b.Incidents != nil && b.Support != nil {
 		a.Status = true
 		a.Data = b
@@ -45,6 +46,7 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 func homePage(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("./web/status_page.html")
 	t.Execute(w, nil)

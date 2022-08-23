@@ -10,6 +10,7 @@ import (
 	"Finale/internal/support"
 	"Finale/internal/voice_call"
 	"sort"
+	"sync"
 )
 
 type ResultT struct {
@@ -33,17 +34,21 @@ type ResultSetT struct {
 
 func GetResultData() ResultSetT {
 	var r ResultSetT
-	resultSMS(&r)
-	resultMMS(&r)
-	resultVoiceCall(&r)
-	resultEmail(&r)
-	resultBilling(&r)
-	resultSupport(&r)
-	resultIncident(&r)
+	var wg sync.WaitGroup
+	wg.Add(7)
+	go resultSMS(&r, &wg)
+	go resultMMS(&r, &wg)
+	go resultVoiceCall(&r, &wg)
+	go resultEmail(&r, &wg)
+	go resultBilling(&r, &wg)
+	go resultSupport(&r, &wg)
+	go resultIncident(&r, &wg)
+	wg.Wait()
+
 	return r
 }
 
-func resultSMS(r *ResultSetT) ResultSetT {
+func resultSMS(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	smsByCountry := sms.SmsGet()
 
 	sort.Slice(smsByCountry, func(i, j int) bool {
@@ -58,9 +63,11 @@ func resultSMS(r *ResultSetT) ResultSetT {
 
 	r.SMS = append(r.SMS, smsByProvider)
 	r.SMS = append(r.SMS, smsByCountry)
+	defer wg.Done()
 	return *r
 }
-func resultMMS(r *ResultSetT) ResultSetT {
+
+func resultMMS(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	mmsByCountry := mms.MMSget()
 
 	sort.Slice(mmsByCountry, func(i, j int) bool {
@@ -75,13 +82,17 @@ func resultMMS(r *ResultSetT) ResultSetT {
 
 	r.MMS = append(r.MMS, mmsByProvider)
 	r.MMS = append(r.MMS, mmsByCountry)
+	defer wg.Done()
 	return *r
 }
-func resultVoiceCall(r *ResultSetT) ResultSetT {
+
+func resultVoiceCall(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	r.VoiceCall = voice_call.VoiceCallGet()
+	defer wg.Done()
 	return *r
 }
-func resultEmail(r *ResultSetT) ResultSetT {
+
+func resultEmail(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	emailByTime := email.EmailGet()
 	sor := make(map[string][]email.EmailData)
 	for _, s := range emailByTime {
@@ -102,13 +113,17 @@ func resultEmail(r *ResultSetT) ResultSetT {
 
 	}
 	r.Email = e
+	defer wg.Done()
 	return *r
 }
-func resultBilling(r *ResultSetT) ResultSetT {
+
+func resultBilling(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	r.Billing = billing.BillingGet()
+	defer wg.Done()
 	return *r
 }
-func resultSupport(r *ResultSetT) ResultSetT {
+
+func resultSupport(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	supportData := support.SupportGet()
 	load := 0
 	sup := 0
@@ -126,13 +141,16 @@ func resultSupport(r *ResultSetT) ResultSetT {
 	time := 60 / 18 * sup
 	r.Support = append(r.Support, load)
 	r.Support = append(r.Support, time)
+	defer wg.Done()
 	return *r
 }
-func resultIncident(r *ResultSetT) ResultSetT {
+
+func resultIncident(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	incidentData := incident.IncidentGet()
 	sort.Slice(incidentData, func(i, j int) bool {
 		return incidentData[i].Status < incidentData[j].Status
 	})
 	r.Incidents = incidentData
+	defer wg.Done()
 	return *r
 }
