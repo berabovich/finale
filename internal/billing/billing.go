@@ -18,6 +18,7 @@ type BillingData struct {
 	CheckoutPage   bool `json:"checkout_page"`
 }
 
+// BillingGet get billing data from file and check it
 func BillingGet() BillingData {
 	f, err := ioutil.ReadFile(filePath)
 	if err != nil {
