@@ -11,6 +11,7 @@ type IncidentData struct {
 	Status string `json:"status"` // возможные статусы: active и closed
 }
 
+// IncidentGet get incident data from link and check it
 func IncidentGet() []IncidentData {
 	var incidentData []IncidentData
 	r, err := http.Get("http://127.0.0.1:8383/accendent")

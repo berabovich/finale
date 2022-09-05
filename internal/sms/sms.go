@@ -29,6 +29,7 @@ func (s *SMSData) parse(in string) bool {
 	return false
 }
 
+// SmsGet read sms data from file and check it
 func SmsGet() []SMSData {
 	f, err := ioutil.ReadFile(filePath)
 	if err != nil {

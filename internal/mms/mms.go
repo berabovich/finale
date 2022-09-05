@@ -15,6 +15,7 @@ type MmsData struct {
 	ResponseTime string `json:"response_time"`
 }
 
+// MMSget get mms data from link and check it
 func MMSget() []MmsData {
 	var mmsData []MmsData
 	r, err := http.Get("http://127.0.0.1:8383/mms")

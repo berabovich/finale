@@ -32,6 +32,7 @@ func (s *EmailData) parse(in string) bool {
 	return false
 }
 
+// EmailGet get email data from file and check it
 func EmailGet() []EmailData {
 	f, err := ioutil.ReadFile(filePath)
 	if err != nil {

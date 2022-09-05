@@ -51,6 +51,7 @@ func (s *VoiceCallData) parse(in string) bool {
 	return false
 }
 
+// VoiceCallGet read file voica data and check data
 func VoiceCallGet() []VoiceCallData {
 	f, err := ioutil.ReadFile(filePath)
 	if err != nil {

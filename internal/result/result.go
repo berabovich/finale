@@ -11,6 +11,7 @@ import (
 	"Finale/internal/voice_call"
 	"sort"
 	"sync"
+	"time"
 )
 
 type ResultT struct {
@@ -32,20 +33,36 @@ type ResultSetT struct {
 	Incidents []incident.IncidentData        `json:"incident"`
 }
 
-func GetResultData() ResultSetT {
-	var r ResultSetT
-	var wg sync.WaitGroup
-	wg.Add(7)
-	go resultSMS(&r, &wg)
-	go resultMMS(&r, &wg)
-	go resultVoiceCall(&r, &wg)
-	go resultEmail(&r, &wg)
-	go resultBilling(&r, &wg)
-	go resultSupport(&r, &wg)
-	go resultIncident(&r, &wg)
-	wg.Wait()
+type ResultAgr struct {
+	sync.Mutex
+	rs ResultSetT
+	t  int64
+}
 
-	return r
+// GetResultData get all results and return data comparing time
+func (ra *ResultAgr) GetResultData() ResultSetT {
+	timeNow := time.Now().Unix()
+	if timeNow-ra.t > 30 || ra.t == 0 {
+		ra.Lock()
+		var r ResultSetT
+		var wg sync.WaitGroup
+		wg.Add(7)
+		go resultSMS(&r, &wg)
+		go resultMMS(&r, &wg)
+		go resultVoiceCall(&r, &wg)
+		go resultEmail(&r, &wg)
+		go resultBilling(&r, &wg)
+		go resultSupport(&r, &wg)
+		go resultIncident(&r, &wg)
+		wg.Wait()
+		ra.rs = r
+		ra.t = timeNow
+		ra.Unlock()
+		return ra.rs
+	}
+
+	return ra.rs
+
 }
 
 func resultSMS(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
@@ -138,9 +155,9 @@ func resultSupport(r *ResultSetT, wg *sync.WaitGroup) ResultSetT {
 	case sup > 16:
 		load = 3
 	}
-	time := 60 / 18 * sup
+	t := 60 / 18 * sup
 	r.Support = append(r.Support, load)
-	r.Support = append(r.Support, time)
+	r.Support = append(r.Support, t)
 	defer wg.Done()
 	return *r
 }
