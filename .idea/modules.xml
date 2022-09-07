@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/finale.iml" filepath="$PROJECT_DIR$/.idea/finale.iml" />
       <module fileurl="file://$PROJECT_DIR$/../simulator/.idea/simulator.iml" filepath="$PROJECT_DIR$/../simulator/.idea/simulator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../simulator/.idea/skillbox-diploma.iml" filepath="$PROJECT_DIR$/../simulator/.idea/skillbox-diploma.iml" />
     </modules>
   </component>
 </project>

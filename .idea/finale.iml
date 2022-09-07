@@ -6,5 +6,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="simulator" />
+    <orderEntry type="module" module-name="skillbox-diploma" />
   </component>
 </module>
